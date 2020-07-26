@@ -11,8 +11,8 @@ let state: State = {
   context,
   cursor: {
     p: { x: 0, y: 0 },
-    v: { x: 0, y: 0 },
-    a: { x: 0, y: -1 },
+    v: { x: 0, y: 100 },
+    a: { x: 0, y: 0 },
   },
   paused: false,
 }
@@ -49,10 +49,10 @@ function drawBackground(state: State): void {
   const numLines = 4
   const lineRangeY = canvas.height / numLines
   context.resetTransform()
-  context.translate(0, state.cursor.p.y % canvas.height)
+  context.translate(0, state.cursor.p.y % lineRangeY)
   context.strokeStyle = 'white'
   for (let i = 0; i < numLines; i++) {
-    const y = i * lineRangeY + lineRangeY / 2
+    const y = i * lineRangeY
     context.beginPath()
     context.moveTo(0, y)
     context.lineTo(canvas.width, y)
