@@ -31,24 +31,29 @@ document.addEventListener('keydown', (e: KeyboardEvent) => {
   }
 })
 
-document.addEventListener('mousedown', (e: MouseEvent) => {
+let lastClientX: number
+document.addEventListener('pointerdown', (e: PointerEvent) => {
+  lastClientX = e.clientX
   state = {
     ...state,
     dragging: true,
   }
 })
 
-document.addEventListener('mousemove', (e: MouseEvent) => {
+document.addEventListener('pointermove', (e: PointerEvent) => {
+  // movementX not support for non-mouse events :(
+  const movementX = e.clientX - lastClientX
+  lastClientX = e.clientX
   if (!state.dragging) {
     return
   }
   state = {
     ...state,
-    dragX: state.dragX + e.movementX,
+    dragX: state.dragX + movementX,
   }
 })
 
-document.addEventListener('mouseup', (e: MouseEvent) => {
+document.addEventListener('pointerup', (e: PointerEvent) => {
   state = {
     ...state,
     dragging: false,
