@@ -55,6 +55,11 @@ document.addEventListener('mouseup', (e: MouseEvent) => {
   }
 })
 
+// disable bounce on ios
+document.addEventListener('touchmove', (e: TouchEvent) => {
+  e.preventDefault()
+}, { passive: false })
+
 function drawCursor(state: State): void {
   const { context, canvas } = state
 
