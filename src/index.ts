@@ -14,6 +14,12 @@ let state: State = {
 
 function drawCursor(state: State): void {
   const { context } = state
+
+  context.resetTransform()
+  context.translate(
+    canvas.width / 2 - 100 / 2,
+    canvas.height / 2 - 100 / 2)
+
   context.moveTo(50, 0)
   context.fillStyle = 'white'
   context.beginPath()
