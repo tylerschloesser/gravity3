@@ -18,7 +18,7 @@ function generatePoints(): Point[] {
     points.push({
       p: {
         x: i % 2 ? -canvas.width / 4 : canvas.width / 4,
-        y: (i + 1) * 500 + 4000,
+        y: (i + 1) * 2000 + 4000,
       },
       hit: false,
     })
