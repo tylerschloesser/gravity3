@@ -12,16 +12,22 @@ let state: State = {
   context,
 }
 
+function drawCursor(state: State): void {
+  const { context } = state
+  context.moveTo(50, 0)
+  context.fillStyle = 'white'
+  context.beginPath()
+  context.lineTo(100, 100)
+  context.lineTo(0, 100)
+  context.lineTo(50, 0)
+  context.fill()
+}
+
 function handleFrame(now: DOMHighResTimeStamp): void {
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
 
-  context.fillStyle = 'white'
-  context.beginPath()
-  context.moveTo(100, 0)
-  context.lineTo(0, 100)
-  context.lineTo(0, 0)
-  context.fill()
+  drawCursor(state)
 
   window.requestAnimationFrame(handleFrame)
 }
