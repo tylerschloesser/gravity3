@@ -7,12 +7,24 @@ canvas.width = document.body.clientWidth
 canvas.height = document.body.clientHeight
 
 function generatePoints(): Point[] {
-  return [
+  const points: Point[] = [
     {
       p: { x: 0, y: 4000 },
       hit: false,
     },
   ]
+
+  for (let i = 0; i < 100; i++) {
+    points.push({
+      p: {
+        x: 0,
+        y: i * 500 + 4000,
+      },
+      hit: false,
+    })
+  }
+
+  return points
 }
 
 let state: State = {
