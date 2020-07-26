@@ -23,7 +23,7 @@ export interface State {
 
   dragging: boolean
   dragX: number
-  maxSpeed: number
+  maxSpeed: Vec2
 
   centerA: number
 

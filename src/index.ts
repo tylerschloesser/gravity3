@@ -33,13 +33,13 @@ let state: State = {
   cursor: {
     p: { x: 0, y: 0 },
     v: { x: 0, y: 0 },
-    a: { x: 0, y: 500 },
+    a: { x: 0, y: 1000 },
   },
   paused: false,
   dragging: false,
   dragX: 0,
-  maxSpeed: 1000,
-  centerA: 500,
+  maxSpeed: { x: 800, y: 1000 },
+  centerA: 800,
   points: generatePoints(),
 }
 
@@ -208,15 +208,28 @@ function calcCursor(state: State, elapsed: number): State {
     y: cursor.v.y + cursor.a.y * (elapsed / 1000),
   }
 
-  const speed = Math.sqrt(
-    nextV.x * nextV.x +
-    nextV.y * nextV.y
-  )
+  //const speed = Math.sqrt(
+  //  nextV.x * nextV.x +
+  //  nextV.y * nextV.y
+  //)
 
-  if (speed > maxSpeed) {
+  //if (speed > maxSpeed) {
+  //  nextV = {
+  //    x: nextV.x / speed * maxSpeed,
+  //    y: nextV.y / speed * maxSpeed,
+  //  }
+  //}
+
+  if (nextV.y > maxSpeed.y) {
     nextV = {
-      x: nextV.x / speed * maxSpeed,
-      y: nextV.y / speed * maxSpeed,
+      ...nextV,
+      y: maxSpeed.y,
+    }
+  }
+  if (Math.abs(nextV.x) > maxSpeed.x) {
+    nextV = {
+      ...nextV,
+      x: maxSpeed.x * (nextV.x / Math.abs(nextV.x)),
     }
   }
 
