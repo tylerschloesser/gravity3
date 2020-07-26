@@ -15,6 +15,8 @@ let state: State = {
     a: { x: 0, y: 0 },
   },
   paused: false,
+  dragging: false,
+  dragX: 0,
 }
 
 document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -27,12 +29,36 @@ document.addEventListener('keydown', (e: KeyboardEvent) => {
   }
 })
 
+document.addEventListener('mousedown', (e: MouseEvent) => {
+  state = {
+    ...state,
+    dragging: true,
+  }
+})
+
+document.addEventListener('mousemove', (e: MouseEvent) => {
+  if (!state.dragging) {
+    return
+  }
+  state = {
+    ...state,
+    dragX: state.dragX + e.movementX,
+  }
+})
+
+document.addEventListener('mouseup', (e: MouseEvent) => {
+  state = {
+    ...state,
+    dragging: false,
+  }
+})
+
 function drawCursor(state: State): void {
   const { context, canvas } = state
 
   context.resetTransform()
   context.translate(
-    canvas.width / 2 - 100 / 2,
+    canvas.width / 2 - 100 / 2 + state.cursor.p.x,
     canvas.height / 2 - 100 / 2)
 
   context.fillStyle = 'white'
@@ -58,6 +84,26 @@ function drawBackground(state: State): void {
     context.lineTo(canvas.width, y)
     context.stroke()
   }
+}
+
+function applyDragToCursor(state: State, elapsed: number): State {
+  if (state.dragX === 0) {
+    return state
+  }
+  const { cursor } = state
+  const newState = {
+    ...state,
+    cursor: {
+      ...cursor,
+      a: {
+        ...cursor.a,
+        x: cursor.a.x + state.dragX,
+      },
+    },
+    dragX: 0,
+  }
+  console.log(JSON.stringify(newState))
+  return newState
 }
 
 function calcCursor(state: State, elapsed: number): State {
@@ -99,6 +145,7 @@ function handleFrame(now: DOMHighResTimeStamp): void {
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
 
+  state = applyDragToCursor(state, elapsed)
   state = calcCursor(state, elapsed)
   //console.log(JSON.stringify(state.cursor))
 

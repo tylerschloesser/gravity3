@@ -15,4 +15,7 @@ export interface State {
   cursor: Cursor
 
   paused: boolean
+
+  dragging: boolean
+  dragX: number
 }
