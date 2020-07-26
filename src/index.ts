@@ -11,8 +11,8 @@ let state: State = {
   context,
   cursor: {
     p: { x: 0, y: 0 },
-    v: { x: 0, y: 100 },
-    a: { x: 0, y: 0 },
+    v: { x: 0, y: 0 },
+    a: { x: 0, y: 100 },
   },
   paused: false,
   dragging: false,
@@ -60,6 +60,7 @@ function drawCursor(state: State): void {
   context.translate(
     canvas.width / 2 - 100 / 2 + state.cursor.p.x,
     canvas.height / 2 - 100 / 2)
+  context.rotate(-Math.atan2(state.cursor.v.y, state.cursor.v.x) + Math.PI / 2)
 
   context.fillStyle = 'white'
   context.beginPath()
