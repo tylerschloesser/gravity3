@@ -18,6 +18,7 @@ let state: State = {
   dragging: false,
   dragX: 0,
   maxSpeed: 500,
+  centerA: 250,
 }
 
 document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -117,8 +118,15 @@ function calcCursor(state: State, elapsed: number): State {
     y: cursor.p.y + cursor.v.y * (elapsed / 1000),
   }
 
+  let centerA = 0
+  if (cursor.p.x < 0) {
+    centerA = state.centerA
+  } else if (cursor.p.x > 0) {
+    centerA = -state.centerA
+  }
+
   let nextV = {
-    x: cursor.v.x + cursor.a.x * (elapsed / 1000),
+    x: cursor.v.x + cursor.a.x * (elapsed / 1000) + centerA * (elapsed / 1000),
     y: cursor.v.y + cursor.a.y * (elapsed / 1000),
   }
 

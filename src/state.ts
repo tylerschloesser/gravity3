@@ -19,4 +19,6 @@ export interface State {
   dragging: boolean
   dragX: number
   maxSpeed: number
+
+  centerA: number
 }
