@@ -5,6 +5,8 @@ interface Vec2 {
 
 interface Cursor {
   p: Vec2
+  v: Vec2
+  a: Vec2
 }
 
 export interface State {

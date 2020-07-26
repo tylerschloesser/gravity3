@@ -11,11 +11,13 @@ let state: State = {
   context,
   cursor: {
     p: { x: 0, y: 0 },
+    v: { x: 0, y: 0 },
+    a: { x: 0, y: -1 },
   },
 }
 
 function drawCursor(state: State): void {
-  const { context } = state
+  const { context, canvas } = state
 
   context.resetTransform()
   context.translate(
@@ -31,12 +33,60 @@ function drawCursor(state: State): void {
   context.fill()
 }
 
+function drawBackground(state: State): void {
+  const { canvas, context } = state
+  const numLines = 4
+  const lineRangeY = canvas.height / numLines
+  context.resetTransform()
+  context.translate(0, state.cursor.p.y % canvas.height)
+  context.strokeStyle = 'white'
+  for (let i = 0; i < numLines; i++) {
+    const y = i * lineRangeY + lineRangeY / 2
+    context.beginPath()
+    context.moveTo(0, y)
+    context.lineTo(canvas.width, y)
+    context.stroke()
+  }
+}
+
+function calcCursor(state: State, elapsed: number): State {
+
+  const { cursor } = state
+  const nextP = {
+    x: cursor.p.x + cursor.v.x * (elapsed / 1000),
+    y: cursor.p.y + cursor.v.y * (elapsed / 1000),
+  }
+
+  const nextV = {
+    x: cursor.v.x + cursor.a.x * (elapsed / 1000),
+    y: cursor.v.y + cursor.a.y * (elapsed / 1000),
+  }
+
+  return {
+    ...state,
+    cursor: {
+      ...cursor,
+      p: nextP,
+      v: nextV,
+    }
+  }
+}
+
+let lastFrame: DOMHighResTimeStamp = 0
+
 function handleFrame(now: DOMHighResTimeStamp): void {
+  const elapsed = now.valueOf() - lastFrame.valueOf()
+  context.clearRect(0, 0, canvas.width, canvas.height)
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
 
+  state = calcCursor(state, elapsed)
+  //console.log(JSON.stringify(state.cursor))
+
+  drawBackground(state)
   drawCursor(state)
 
+  lastFrame = now
   window.requestAnimationFrame(handleFrame)
 }
 window.requestAnimationFrame(handleFrame)
