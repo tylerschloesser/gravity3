@@ -6,10 +6,12 @@ const context = canvas.getContext('2d')
 canvas.width = document.body.clientWidth
 canvas.height = document.body.clientHeight
 
-
 let state: State = {
   canvas,
   context,
+  cursor: {
+    p: { x: 0, y: 0 },
+  },
 }
 
 function drawCursor(state: State): void {
