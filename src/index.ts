@@ -14,7 +14,18 @@ let state: State = {
     v: { x: 0, y: 0 },
     a: { x: 0, y: -1 },
   },
+  paused: false,
 }
+
+document.addEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === ' ') {
+    state = {
+      ...state,
+      paused: !state.paused,
+    }
+    console.log('paused:', state.paused)
+  }
+})
 
 function drawCursor(state: State): void {
   const { context, canvas } = state
@@ -24,9 +35,9 @@ function drawCursor(state: State): void {
     canvas.width / 2 - 100 / 2,
     canvas.height / 2 - 100 / 2)
 
-  context.moveTo(50, 0)
   context.fillStyle = 'white'
   context.beginPath()
+  context.moveTo(50, 0)
   context.lineTo(100, 100)
   context.lineTo(0, 100)
   context.lineTo(50, 0)
@@ -75,6 +86,13 @@ function calcCursor(state: State, elapsed: number): State {
 let lastFrame: DOMHighResTimeStamp = 0
 
 function handleFrame(now: DOMHighResTimeStamp): void {
+
+  if (state.paused) {
+    lastFrame = now
+    window.requestAnimationFrame(handleFrame)
+    return
+  }
+
   const elapsed = now.valueOf() - lastFrame.valueOf()
   context.clearRect(0, 0, canvas.width, canvas.height)
   context.fillStyle = 'black'
