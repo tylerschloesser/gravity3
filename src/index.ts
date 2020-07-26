@@ -70,16 +70,16 @@ function drawCursor(state: State): void {
 
   context.resetTransform()
   context.translate(
-    canvas.width / 2 - 100 / 2 + state.cursor.p.x,
-    canvas.height / 2 - 100 / 2)
+    canvas.width / 2 + state.cursor.p.x,
+    canvas.height / 2)
   context.rotate(-Math.atan2(state.cursor.v.y, state.cursor.v.x) + Math.PI / 2)
 
   context.fillStyle = 'white'
   context.beginPath()
-  context.moveTo(50, 0)
-  context.lineTo(100, 100)
-  context.lineTo(0, 100)
-  context.lineTo(50, 0)
+  context.moveTo(0, -50)
+  context.lineTo(50, 50)
+  context.lineTo(-50, 50)
+  context.lineTo(0, -50)
   context.fill()
 }
 
