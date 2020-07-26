@@ -1,10 +1,19 @@
-import { State } from './state'
+import { State, Point } from './state'
 
 const canvas = document.querySelector('canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')
 
 canvas.width = document.body.clientWidth
 canvas.height = document.body.clientHeight
+
+function generatePoints(): Point[] {
+  return [
+    {
+      p: { x: 0, y: 4000 },
+      hit: false,
+    },
+  ]
+}
 
 let state: State = {
   canvas,
@@ -20,12 +29,7 @@ let state: State = {
   maxSpeed: 1000,
   centerA: 500,
   score: 0,
-  points: [
-    {
-      p: { x: 0, y: 4000 },
-      hit: false,
-    },
-  ],
+  points: generatePoints(),
 }
 
 document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -125,15 +129,42 @@ function applyDragToCursor(state: State, elapsed: number): State {
   return newState
 }
 
+function calcPointHit(state: State): State {
+
+  const { cursor, points } = state
+  let newPoints: Point[] = []
+
+  for (const point of points) {
+    if (Math.abs(point.p.y - cursor.p.y) < 20 &&
+      Math.abs(point.p.x - cursor.p.x) < 20) {
+      newPoints.push({
+        ...point,
+        hit: true,
+      })
+    } else {
+      newPoints.push(point)
+    }
+  }
+
+  return {
+    ...state,
+    points: newPoints,
+  }
+}
+
 function drawPoints(state: State): void {
   const { context, canvas, cursor } = state
   context.resetTransform()
   context.translate(canvas.width / 2, canvas.height / 2)
-  context.fillStyle = 'blue'
   for (const point of state.points) {
     if (point.p.y > (cursor.p.y - canvas.height / 2)
       && point.p.y < (cursor.p.y + canvas.height / 2)) {
 
+      if (point.hit) {
+        context.fillStyle = 'orange'
+      } else {
+        context.fillStyle = 'blue'
+      }
       context.beginPath()
       context.arc(0, cursor.p.y - point.p.y, 20, 0, 2 * Math.PI)
       context.fill()
@@ -186,6 +217,7 @@ function calcCursor(state: State, elapsed: number): State {
   }
 }
 
+
 function drawScore(state: State): void {
   const { context } = state
   context.fillStyle = 'white'
@@ -212,6 +244,7 @@ function handleFrame(now: DOMHighResTimeStamp): void {
 
   state = applyDragToCursor(state, elapsed)
   state = calcCursor(state, elapsed)
+  state = calcPointHit(state)
 
   drawBackground(state)
   drawPoints(state)

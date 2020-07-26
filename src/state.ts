@@ -9,7 +9,7 @@ interface Cursor {
   a: Vec2
 }
 
-interface Point {
+export interface Point {
   p: Vec2
   hit: boolean
 }
