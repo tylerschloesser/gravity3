@@ -20,6 +20,12 @@ let state: State = {
   maxSpeed: 1000,
   centerA: 500,
   score: 0,
+  points: [
+    {
+      p: { x: 0, y: 4000 },
+      hit: false,
+    },
+  ],
 }
 
 document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -119,6 +125,23 @@ function applyDragToCursor(state: State, elapsed: number): State {
   return newState
 }
 
+function drawPoints(state: State): void {
+  const { context, canvas, cursor } = state
+  context.resetTransform()
+  context.translate(canvas.width / 2, canvas.height / 2)
+  context.fillStyle = 'blue'
+  for (const point of state.points) {
+    if (point.p.y > (cursor.p.y - canvas.height / 2)
+      && point.p.y < (cursor.p.y + canvas.height / 2)) {
+
+      context.beginPath()
+      context.arc(0, cursor.p.y - point.p.y, 20, 0, 2 * Math.PI)
+      context.fill()
+
+    }
+  }
+}
+
 function calcCursor(state: State, elapsed: number): State {
 
   const { maxSpeed } = state
@@ -165,6 +188,7 @@ function calcCursor(state: State, elapsed: number): State {
 
 function drawScore(state: State): void {
   const { context } = state
+  context.fillStyle = 'white'
   context.resetTransform()
   context.font = '48px serif'
   context.fillText(`Score: ${state.score}`, 0, 48)
@@ -190,6 +214,7 @@ function handleFrame(now: DOMHighResTimeStamp): void {
   state = calcCursor(state, elapsed)
 
   drawBackground(state)
+  drawPoints(state)
   drawCursor(state)
   drawScore(state)
 

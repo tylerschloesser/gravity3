@@ -9,6 +9,11 @@ interface Cursor {
   a: Vec2
 }
 
+interface Point {
+  p: Vec2
+  hit: boolean
+}
+
 export interface State {
   canvas: HTMLCanvasElement
   context: CanvasRenderingContext2D
@@ -22,4 +27,6 @@ export interface State {
 
   centerA: number
   score: number
+
+  points: Point[]
 }
