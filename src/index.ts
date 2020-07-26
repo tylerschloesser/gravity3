@@ -12,11 +12,12 @@ let state: State = {
   cursor: {
     p: { x: 0, y: 0 },
     v: { x: 0, y: 0 },
-    a: { x: 0, y: 100 },
+    a: { x: 0, y: 250 },
   },
   paused: false,
   dragging: false,
   dragX: 0,
+  maxSpeed: 500,
 }
 
 document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -103,11 +104,12 @@ function applyDragToCursor(state: State, elapsed: number): State {
     },
     dragX: 0,
   }
-  console.log(JSON.stringify(newState))
   return newState
 }
 
 function calcCursor(state: State, elapsed: number): State {
+
+  const { maxSpeed } = state
 
   const { cursor } = state
   const nextP = {
@@ -115,9 +117,21 @@ function calcCursor(state: State, elapsed: number): State {
     y: cursor.p.y + cursor.v.y * (elapsed / 1000),
   }
 
-  const nextV = {
+  let nextV = {
     x: cursor.v.x + cursor.a.x * (elapsed / 1000),
     y: cursor.v.y + cursor.a.y * (elapsed / 1000),
+  }
+
+  const speed = Math.sqrt(
+    nextV.x * nextV.x +
+    nextV.y * nextV.y
+  )
+
+  if (speed > maxSpeed) {
+    nextV = {
+      x: nextV.x / speed * maxSpeed,
+      y: nextV.y / speed * maxSpeed,
+    }
   }
 
   return {
@@ -148,7 +162,6 @@ function handleFrame(now: DOMHighResTimeStamp): void {
 
   state = applyDragToCursor(state, elapsed)
   state = calcCursor(state, elapsed)
-  //console.log(JSON.stringify(state.cursor))
 
   drawBackground(state)
   drawCursor(state)
