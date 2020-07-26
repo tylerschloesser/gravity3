@@ -12,13 +12,14 @@ let state: State = {
   cursor: {
     p: { x: 0, y: 0 },
     v: { x: 0, y: 0 },
-    a: { x: 0, y: 250 },
+    a: { x: 0, y: 500 },
   },
   paused: false,
   dragging: false,
   dragX: 0,
-  maxSpeed: 500,
-  centerA: 250,
+  maxSpeed: 1000,
+  centerA: 500,
+  score: 0,
 }
 
 document.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -162,6 +163,13 @@ function calcCursor(state: State, elapsed: number): State {
   }
 }
 
+function drawScore(state: State): void {
+  const { context } = state
+  context.resetTransform()
+  context.font = '48px serif'
+  context.fillText(`Score: ${state.score}`, 0, 48)
+}
+
 let lastFrame: DOMHighResTimeStamp = 0
 
 function handleFrame(now: DOMHighResTimeStamp): void {
@@ -183,6 +191,7 @@ function handleFrame(now: DOMHighResTimeStamp): void {
 
   drawBackground(state)
   drawCursor(state)
+  drawScore(state)
 
   lastFrame = now
   window.requestAnimationFrame(handleFrame)

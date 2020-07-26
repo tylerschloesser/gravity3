@@ -21,4 +21,5 @@ export interface State {
   maxSpeed: number
 
   centerA: number
+  score: number
 }
