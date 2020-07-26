@@ -17,8 +17,8 @@ function generatePoints(): Point[] {
   for (let i = 0; i < 100; i++) {
     points.push({
       p: {
-        x: 0,
-        y: i * 500 + 4000,
+        x: i % 2 ? -canvas.width / 4 : canvas.width / 4,
+        y: (i + 1) * 500 + 4000,
       },
       hit: false,
     })
@@ -146,8 +146,8 @@ function calcPointHit(state: State): State {
   let newPoints: Point[] = []
 
   for (const point of points) {
-    if (Math.abs(point.p.y - cursor.p.y) < 20 &&
-      Math.abs(point.p.x - cursor.p.x) < 20) {
+    if (Math.abs(point.p.y - cursor.p.y) < 50 &&
+      Math.abs(point.p.x - cursor.p.x) < 50) {
       newPoints.push({
         ...point,
         hit: true,
@@ -177,7 +177,9 @@ function drawPoints(state: State): void {
         context.fillStyle = 'blue'
       }
       context.beginPath()
-      context.arc(0, cursor.p.y - point.p.y, 20, 0, 2 * Math.PI)
+      context.arc(
+        point.p.x,
+        cursor.p.y - point.p.y, 20, 0, 2 * Math.PI)
       context.fill()
 
     }
