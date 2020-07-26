@@ -98,9 +98,9 @@ function applyDragToCursor(state: State, elapsed: number): State {
     ...state,
     cursor: {
       ...cursor,
-      a: {
-        ...cursor.a,
-        x: cursor.a.x + state.dragX,
+      v: {
+        ...cursor.v,
+        x: cursor.v.x + state.dragX,
       },
     },
     dragX: 0,
