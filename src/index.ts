@@ -94,6 +94,7 @@ function handleFrame(now: DOMHighResTimeStamp): void {
   }
 
   const elapsed = now.valueOf() - lastFrame.valueOf()
+  context.resetTransform()
   context.clearRect(0, 0, canvas.width, canvas.height)
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
