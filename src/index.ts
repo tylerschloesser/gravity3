@@ -28,7 +28,6 @@ let state: State = {
   dragX: 0,
   maxSpeed: 1000,
   centerA: 500,
-  score: 0,
   points: generatePoints(),
 }
 
@@ -219,11 +218,14 @@ function calcCursor(state: State, elapsed: number): State {
 
 
 function drawScore(state: State): void {
-  const { context } = state
+  const { context, points } = state
+
+  const score = points.reduce((acc, point) => acc + (point.hit ? 1 : 0), 0)
+
   context.fillStyle = 'white'
   context.resetTransform()
   context.font = '48px serif'
-  context.fillText(`Score: ${state.score}`, 0, 48)
+  context.fillText(`Score: ${score}`, 0, 48)
 }
 
 let lastFrame: DOMHighResTimeStamp = 0
